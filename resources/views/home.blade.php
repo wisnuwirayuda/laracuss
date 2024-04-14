@@ -9,6 +9,7 @@
         @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     </head>
     <body class="antialiased">
+        {{-- NAVBAR --}}
         <nav class="navbar navbar-dark navbar-expand-lg bg-primary">
             <div class="container flex justify-content-between">
               <a class="navbar-link" href="{{ route('home') }}">
@@ -48,10 +49,12 @@
               </div>
             </div>
         </nav>
+
+        {{-- HERO --}}
         <section class="container hero">
           <div class="row align-items-center h-100">
             <div class="col-12 col-lg-6">
-              <h1>The Laravel<br />Community Forum</h1>
+              <h1 class="fw-bold">The Laravel<br />Community Forum</h1>
               <p class="mb-4">
                 Empowering the Laravel community to connect, share and learn.
               </p>
@@ -63,5 +66,28 @@
             </div>
           </div>
         </section>
+        
+        {{-- PROMOTIONS --}}
+        <section class="container min-h-372px">
+          <div class="row">
+            <div class="col-12 col-lg-4 text-center">
+              <img class="promote-icon mb-2" src="{{ url("assets/img/discussions.png") }}" alt="discussions">
+              <h2>Discussions</h2>
+              <p class="fs-3">51,875</p>
+            </div>
+            <div class="col-12 col-lg-4 text-center">
+              <img class="promote-icon mb-2" src="{{ url("assets/img/answers.png") }}" alt="answers">
+              <h2>Answers</h2>
+              <p class="fs-3">121,984</p>
+            </div>
+            <div class="col-12 col-lg-4 text-center">
+              <img class="promote-icon mb-2" src="{{ url("assets/img/users.png") }}" alt="users">
+              <h2>Users</h2>
+              <p class="fs-3">11,675</p>
+            </div>
+          </div>
+        </section>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     </body>
 </html>
