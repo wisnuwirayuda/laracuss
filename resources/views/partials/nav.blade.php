@@ -22,7 +22,7 @@
         <form class="d-flex w-100 me-4 my-2 my-lg-0" role="search" action="#"  method="GET">
           <div class="input-group">
             <span class="input-group-text bg-white border-end-0">
-              <img src="{{ url('assets/img/magnifier.png') }}" alt="Search">
+              <img src="{{ url('assets/img/magnifier.png') }}" alt="Search" class="h-19px">
             </span>
             <input class="form-control border-start-0 ps-0" type="search" placeholder="Search" aria-label="Search" name="" value="">
           </div>
