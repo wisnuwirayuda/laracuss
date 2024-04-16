@@ -2,11 +2,26 @@
 
 @section('body')
     <section class="bg-gray vh-100">
-        <div class="container h-100 pt-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-3">
-                    <a href="" class="nav-link mb-5 text-center">
-                        <img class="h-32px" src="{{ url('assets/img/logo-blue.png') }}" alt="Laracuss-Logo">
+        <div class="container">
+            <div class="row pt-5 justify-content-center">
+                <div class="col-12 col-lg-6 my-auto mb-5 mb-lg-auto me-0">
+                    <div class="d-none d-lg-block">
+                        <h2>Join the Laracuss Community</h2>
+                        <p>
+                            <ul>
+                                <li>Stuck? Ask in the Discussions</li>
+                                <li>Get answers from experienced developers from around the world</li>
+                                <li>Contribute by answering questions</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="d-block d-lg-none text-center">
+                        <h2>Create you account in a minute. It's free.</h2>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 h-100">
+                    <a href="#" class="nav-link mb-5 text-center">
+                        <img src="{{ url('assets/img/logo-blue.png') }}" alt="Laracuss Logo" class="h-32px">
                     </a>
                     <div class="card mb-5">
                         <form action="#" method="POST">
@@ -25,13 +40,17 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="name" autocomplete="off">
+                            </div>
                             <div class="mb-3 d-grid">
-                                <button type="submit" class="btn btn-primary rounded-2">Log in</button>
+                                <button type="submit" class="btn btn-primary rounded-2">Sign up</button>
                             </div>
                         </form>
                     </div>
                     <div class="text-center">
-                        Don't have an account? <a href="#"><u>Sign up</u></a>
+                        Already have an account? <a href="#"><u>Log in</u></a>
                     </div>
                 </div>
             </div>
