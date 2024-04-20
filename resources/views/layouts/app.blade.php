@@ -5,6 +5,8 @@
     </head>
     <body class="antialiased">
         @include('partials.nav')
+
+        @include('partials.alert')
         
         @yield('body')
 
