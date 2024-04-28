@@ -9,8 +9,8 @@
         <p class="mb-4">
           Empowering the Laravel community to connect, share and learn.
         </p>
-        <a class="btn btn-primary me-2 mb-2 mb-lg-0" href="#">Sign Up</a>
-        <a class="btn btn-secondary mb-2 mb-lg-0" href="#">Join Discussions</a>
+        <a class="btn btn-primary me-2 mb-2 mb-lg-0" href="{{ route('auth.sign-up.show') }}">Sign Up</a>
+        <a class="btn btn-secondary mb-2 mb-lg-0" href="{{ route('discussions.index') }}">Join Discussions</a>
       </div>
       <div class="col-12 col-lg-6 h-315px order-first order-lg-last mb-3 mb-lg-0">
         <img class="hero-image float-lg-end" src="{{ url("assets/img/hero.png") }}" alt="hero">
@@ -137,8 +137,8 @@
     <h2 class="fw-bold">Ready to Contribute?</h2>
     <p class="mb-4">Want to make a big impact?</p>
     <div class="text-center">
-      <a class="btn btn-primary me-2 mb-2 mb-lg-0" href="#">Sign Up</a>
-      <a class="btn btn-secondary mb-2 mb-lg-0" href="#">Join Discussions</a>
+      <a class="btn btn-primary me-2 mb-2 mb-lg-0" href="{{ route('auth.sign-up.show') }}">Sign Up</a>
+      <a class="btn btn-secondary mb-2 mb-lg-0" href="{{ route('discussions.index') }}">Join Discussions</a>
     </div>
   </section>
 @endsection
