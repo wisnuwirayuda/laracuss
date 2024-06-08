@@ -41,7 +41,7 @@
                         </form>
                     </div>
                     <div class="text-center">
-                        Don't have an account? <a href="#"><u>Sign up</u></a>
+                        Don't have an account? <a href="{{ route('auth.sign-up.show') }}"><u>Sign up</u></a>
                     </div>
                 </div>
             </div>
