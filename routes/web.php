@@ -25,15 +25,15 @@ Route::namespace('App\Http\Controllers\Auth')->group(function() {
     Route::post('sign-up', 'SignUpController@signUp')->name('auth.sign-up.sign-up');
 });
 
+Route::namespace('App\Http\Controllers')->group(function() {
+    Route::resource('discussions', DiscussionController::class)->only(['index', 'show']);
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::namespace('App\Http\Controllers')->group(function() {
         Route::resource('discussions', DiscussionController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
     });
 });
-
-Route::get('discussions', function () {
-    return view('pages.discussions.index');
-})->name('discussions.index');
 
 Route::get('discussions/lorem', function () {
     return view('pages.discussions.show');
