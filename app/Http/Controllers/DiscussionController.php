@@ -13,19 +13,27 @@ class DiscussionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Load semua discussion
         // Eager load relationship/relasi
+        // Apakah ada request data "search"
+        // Jika ada maka load discussion dengan kata kunci title dan content yang nilainya seperti nilai "search"
         // return page index beserta data
         // Data yang di pass ke view adalah discussion yang sudah disort dengan created at menurun, pagination per 10 / 20
         // Data all category
 
         $discussions = Discussion::with('user', 'category');
 
+        if ($request->search) {
+            $discussions->where('title', 'like', "%$request->search%")
+            ->orWhere('content', 'like', "%$request->search%");
+        }
+
         return response()->view('pages.discussions.index', [
-            'discussions' => $discussions->orderBy('created_at', 'desc')->paginate(10),
-            'categories'  => Category::all()
+            'discussions' => $discussions->orderBy('created_at', 'desc')->paginate(10)->withQueryString(),
+            'categories'  => Category::all(),
+            'search'      => $request->search,
         ]);
     }
 

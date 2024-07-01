@@ -6,7 +6,7 @@
             <div class="mb-4">
                 <div class="mb-3 d-flex align-items-center justify-content-between">
                     <h2 class="me-4 mb-0">
-                        All Discussions
+                        @if (isset($search)) {{ "Search results for \"$search\"" }} @else {{ 'All Discussions' }} @endif
                     </h2>
                     <div>
                         {{ $discussions->total() . ' ' . Str::plural('Discussion', $discussions->total() )}}
