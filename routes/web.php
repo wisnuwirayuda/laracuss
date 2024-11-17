@@ -37,9 +37,9 @@ Route::namespace('App\Http\Controllers')->group(function() {
    Route::get('discussions/categories/{category}',  'CategoryController@show')->name('discussions.categories.show'); 
 });
 
-Route::get('discussions/lorem', function () {
-    return view('pages.discussions.show');
-})->name('discussions.show');
+// Route::get('discussions/lorem', function () {
+//     return view('pages.discussions.show');
+// })->name('discussions.show');
 
 // Route::get('discussions/create', function () {
 //     return view('pages.discussions.form');

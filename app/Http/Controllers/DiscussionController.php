@@ -84,9 +84,17 @@ class DiscussionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        // Mendapatkan discussion berdasarkan slug, dan eager load user dan category nya
+        // Get All Category
+        $discussion = Discussion::with(['user', 'category'])->where('slug', $slug)->first();
+        
+        // Return response
+        return response()->view('pages.discussions.show', [
+            'discussion' => $discussion,
+            'categories' => Category::all(),
+        ]);
     }
 
     /**
