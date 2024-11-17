@@ -22,10 +22,10 @@
                     <div class="card card-discussions mb-5">
                         <div class="row">
                             <div class="col-1 d-flex flex-column justify-content-start align-items-center">
-                                <a href="#">
-                                    <img src="{{ url('assets/img/like.png') }}" alt="like" class="like-icon mb-1">
+                                <a id="discussion-like" href="javascript:;" data-liked="{{ $discussion->liked() }}">
+                                    <img src="{{ $discussion->liked() ? $likedImage : $notLikedImage }}" alt="like" id="discussion-like-icon" class="like-icon mb-1">
                                 </a>
-                                <span class="fs-4 color-gray mb-1">12</span>
+                                <span id="discussion-like-count" class="fs-4 color-gray mb-1">{{ $discussion->likeCount }}</span>
                             </div>
 
                             <div class="col-11">
@@ -168,7 +168,44 @@
 
                 var alertContainer = alert.find('.container');
                 alertContainer.first().text('Link to this discussion copied successfully');
-            })
+            });
+
+            $('#discussion-like').click(function() {
+                // Mendapatkan data apakah discussion ini sudah pernah dilike oleh user
+                var isLiked = $(this).data('liked');
+                console.log('isLiked', isLiked);
+                
+                // Tentukan route like ajax, berdasarkan dengan apakah ini sudah dilike atau belum
+                var likeRoute = isLiked ? '{{ route("discussions.like.unlike", $discussion->slug) }}' : '{{ route("discussions.like.like", $discussion->slug) }}';
+                console.log('likeRoute', likeRoute);
+                
+                // Lakukan proses ajax
+                $.ajax({
+                    method: 'POST',
+                    url: likeRoute,
+                    data: {
+                        '_token': '{{ csrf_token() }}'
+                    }
+                })
+                // Jika ajax berhasil, maka dapatkan status json
+                .done(function(res) {
+                    // Jika status success, maka isi counter lke dengan data counter like dari json nya
+                    if (res.status == 'success') {
+                        $('#discussion-like-count').text(res.data.likeCount);
+
+                        // Lalu ganti icon like berdasarkan dengan nilai variable pada point 1
+                        if (isLiked) {
+                            // Jika user sebelumnya sudah like, maka ganti icon jadi notLikedImage 
+                            $('#discussion-like-icon').attr('src', '{{ $notLikedImage }}');
+                        } else {
+                            // Jika user sebelumnya belum like, maka ganti icon jadi likedImage 
+                            $('#discussion-like-icon').attr('src', '{{ $likedImage }}');
+                        }
+
+                        $('#discussion-like').data('liked', !isLiked);
+                    }
+                })
+            });
         })
     </script>
 @endsection
