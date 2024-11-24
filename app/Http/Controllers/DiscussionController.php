@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Discussion;
 use App\Http\Requests\Discussion\StoreRequest;
+use App\Http\Requests\Discussion\UpdateRequest;
 use Str;
 
 class DiscussionController extends Controller
@@ -51,21 +52,22 @@ class DiscussionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreRequest $request)
-    {
+    {        
         // Mendapatkan dulu data dari form request yang sudah valid
+        $validated = $request->validated();
+
         // Get data category berdasarkan slug nya
         // Mendapatkan ID Category
-        // Masukkan User ID ke array validated
-        // Menambahkan slug discussions berdasarkan title (title: create validation laravel, slug: create-validation-laravel-timestamp())
-        // Membuat content_preview berdasarkan content (if content > 120 karakter)
-
-        $validated = $request->validated();
         $categoryId = Category::where('slug', $validated['category_slug'])->first()->id;
 
+        // Masukkan User ID ke array validated
         $validated['category_id'] = $categoryId;
         $validated['user_id']     = auth()->id();
+
+        // Menambahkan slug discussions berdasarkan title (title: create validation laravel, slug: create-validation-laravel-timestamp())
         $validated['slug']        = Str::slug($validated['title']) . '-' . time();
 
+        // Membuat content_preview berdasarkan content (if content > 120 karakter)
         // strip_tags berfungsi untuk menghapus tag HTML pada content
         $stripContent                   = strip_tags($validated['content']);
         $isContentLong                  = strlen($stripContent) > 120;
@@ -74,7 +76,7 @@ class DiscussionController extends Controller
         $create = Discussion::create($validated);
 
         if ($create) {
-            session()->flash('notif.success', 'Discussion created  successfully!');
+            session()->flash('notif.success', 'Discussion created successfully!');
             return redirect()->route('discussions.index');
         }
 
@@ -89,6 +91,12 @@ class DiscussionController extends Controller
         // Mendapatkan discussion berdasarkan slug, dan eager load user dan category nya
         // Get All Category
         $discussion = Discussion::with(['user', 'category'])->where('slug', $slug)->first();
+
+        // Cek apakah data discussion dengan slug tersebut tidak ada
+        if (!$discussion) {
+            // Jika tidak ada maka return page not found
+            return abort(404);
+        }
 
         $notLikedImage = url('assets/img/like.png');
         $likedImage = url('assets/img/liked.png');
@@ -105,17 +113,81 @@ class DiscussionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        //
+        // Get data discussion berdasarkan slug
+        $discussion = Discussion::with('category')->where('slug', $slug)->first();
+
+        // Cek apakah data discussion dengan slug tersebut tidak ada
+        if (!$discussion) {
+            // Jika tidak ada maka return page not found
+            return abort(404);
+        }
+
+        // Jika ada maka lanjut ke bawah
+        $isOwnedByUser = $discussion->user_id == auth()->id();
+
+        // Cek apakah discussion tersebut milik user yg sedang login
+        if (!$isOwnedByUser) {
+            // Jika bukan maka return page not found
+            return abort(404);
+        }
+        
+        // Return view dengan discussion dan category
+        return response()->view('pages.discussions.form', [
+            'discussion' => $discussion,
+            'categories' => Category::all()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $slug)
     {
-        //
+        // Get data discussion berdasarkan slug
+        $discussion = Discussion::with('category')->where('slug', $slug)->first();
+
+        // Cek apakah data discussion dengan slug tersebut tidak ada
+        if (!$discussion) {
+            // Jika tidak ada maka return page not found
+            return abort(404);
+        }
+
+        // Jika ada maka lanjut ke bawah
+        $isOwnedByUser = $discussion->user_id == auth()->id();
+
+        // Cek apakah discussion tersebut milik user yg sedang login
+        if (!$isOwnedByUser) {
+            // Jika bukan maka return page not found
+            return abort(404);
+        }
+
+        // Mendapatkan dulu data dari form request yang sudah valid
+        $validated = $request->validated();
+
+        // Get data category berdasarkan slug nya
+        // Mendapatkan ID Category
+        $categoryId = Category::where('slug', $validated['category_slug'])->first()->id;
+
+        // Masukkan User ID ke array validated
+        $validated['category_id'] = $categoryId;
+        $validated['user_id']     = auth()->id();
+
+        // Membuat content_preview berdasarkan content (if content > 120 karakter)
+        // strip_tags berfungsi untuk menghapus tag HTML pada content
+        $stripContent                   = strip_tags($validated['content']);
+        $isContentLong                  = strlen($stripContent) > 120;
+        $validated['content_preview']   = $isContentLong ? (substr($stripContent, 0, 120) . '...') : $stripContent;
+
+        $update = $discussion->update($validated);
+
+        if ($update) {
+            session()->flash('notif.success', 'Discussion updated successfully!');
+            return redirect()->route('discussions.show', $slug);
+        }
+
+        return abort(500);
     }
 
     /**
