@@ -193,8 +193,37 @@ class DiscussionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        //
+        // Get data discussion berdasarkan slug
+        $discussion = Discussion::with('category')->where('slug', $slug)->first();
+
+        // Cek apakah data discussion dengan slug tersebut tidak ada
+        if (!$discussion) {
+            // Jika tidak ada maka return page not found
+            return abort(404);
+        }
+
+        // Jika ada maka lanjut ke bawah
+        $isOwnedByUser = $discussion->user_id == auth()->id();
+
+        // Cek apakah discussion tersebut milik user yg sedang login
+        if (!$isOwnedByUser) {
+            // Jika bukan maka return page not found
+            return abort(404);
+        }
+
+        // Delete record 
+        $delete = $discussion->delete();
+
+        // Jika berhasil maka return notif success dan redirect ke list discussion
+        if ($delete) {
+            session()->flash('notif.success', 'Discussion deleted successfully');
+
+            return redirect()->route('discussions.index');
+        }
+
+        // Jika tidak berhasil maka lanjut ke kodingan di bawahnya yakni return error 500
+        return abort(500);
     }
 }

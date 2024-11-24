@@ -8,3 +8,12 @@
     width: 32px;
     height: 32px;
 }
+
+.card-discussion-delete-btn {
+    position: relative;
+    top: -2px;
+
+    &:hover {
+        color: $blue-600;
+    }
+}
