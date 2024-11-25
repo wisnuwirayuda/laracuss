@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Discussion;
+use App\Models\Answer;
 use App\Http\Requests\Discussion\StoreRequest;
 use App\Http\Requests\Discussion\UpdateRequest;
 use Str;
@@ -98,15 +99,21 @@ class DiscussionController extends Controller
             return abort(404);
         }
 
+        // Get answer berdasarkan discussion ID
+        // Sort DSC berdasarkan created at
+        // Paginate 5
+        $discussionAnswers = Answer::where('discussion_id', $discussion->id)->orderBy('created_at', 'desc')->paginate(5);
+
         $notLikedImage = url('assets/img/like.png');
         $likedImage = url('assets/img/liked.png');
         
         // Return response
         return response()->view('pages.discussions.show', [
-            'discussion'    => $discussion,
-            'categories'    => Category::all(),
-            'likedImage'    => $likedImage,
-            'notLikedImage' => $notLikedImage,
+            'discussion'        => $discussion,
+            'categories'        => Category::all(),
+            'likedImage'        => $likedImage,
+            'notLikedImage'     => $notLikedImage,
+            'discussionAnswers' => $discussionAnswers
         ]);
     }
 
