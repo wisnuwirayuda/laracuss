@@ -21,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('discussions/{discussion}/unlike', 'LikeController@discussionUnlike')->name('discussions.like.unlike');
         Route::post('discussions/{discussion}/answer', 'AnswerController@store')->name('discussions.answer.store');
         
+        Route::resource('answers', AnswerController::class)->only(['edit', 'update', 'destroy']);
         Route::post('answers/{answer}/like', 'LikeController@answerLike')->name('answers.like.like');
         Route::post('answers/{answer}/unlike', 'LikeController@answerUnlike')->name('answers.unlike.unlike');
     });
@@ -52,9 +53,9 @@ Route::namespace('App\Http\Controllers')->group(function() {
 //     return view('pages.discussions.form');
 // })->name('discussions.create');
 
-Route::get('answers/1', function () {
-    return view('pages.answers.form');
-})->name('answers.edit');
+// Route::get('answers/1', function () {
+//     return view('pages.answers.form');
+// })->name('answers.edit');
 
 Route::get('users/wisnuwirayuda', function () {
     return view('pages.users.show');
