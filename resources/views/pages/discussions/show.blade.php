@@ -111,6 +111,15 @@
                                                             <small>Edit</small>
                                                         </a>
                                                     </span>
+
+                                                    <form action="{{ route('answers.destroy', $answer->id) }}" class="d-inline-block lh-1" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="color-gray btn btn-link text-decoration-none p-0 lh-1 delete-answer">
+                                                            <small>Delete</small>
+                                                        </button>
+                                                    </form>
                                                 @endif
                                             </div>
                                             <div class="col-5 col-lg-3 d-flex">
@@ -256,6 +265,13 @@
 
             $('#delete-discussion').click(function(event) {
                 if (!confirm('Delete this discussion?')) {
+                    // Stop submit form
+                    event.preventDefault();
+                }
+            });
+
+            $('.delete-answer').click(function(event) {
+                if (!confirm('Delete this answer?')) {
                     // Stop submit form
                     event.preventDefault();
                 }
